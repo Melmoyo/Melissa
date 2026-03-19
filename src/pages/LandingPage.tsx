@@ -19,7 +19,7 @@ import mercatoApp from "../assets/images/mercato-store-screenshot.png";
 import techtalentApp from "../assets/images/tech-talent-explorer-screenshot.png";
 import wavestatApp from "../assets/images/wave-stats-app-screenshot.png";
 import profile from "../assets/images/melissa_profile.jpg";
-import fitnessApp from "../assets/images/fitness-booking-spp-screenshot.png";
+import fitnessApp from "../assets/images/fitness-booking-app-screenshot.png";
 
 const LandingPage = () => {
   return (
