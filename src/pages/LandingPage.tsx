@@ -152,7 +152,7 @@ const LandingPage = () => {
             <div className="flex flex-col justify-center items-start space-y-2  ">
               <div className="lg:flex flex-col">
                 <img src={mercatoApp} alt="mercato store app screenshot" />
-                <h2 className=" font-semibold">Mercato Sore App</h2>
+                <h2 className=" font-semibold">Mercato Store App</h2>
                 <p className="text-gray-500 mt-2">
                   A React-based e-commerce app powered by the Fake Store API.
                   Features include product listing, search functionality, and
