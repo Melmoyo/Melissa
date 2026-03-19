@@ -10,16 +10,24 @@ const Navbar = () => {
     <>
       <nav className="relative overflow:hidden border-b sticky top-0 z-50 border-gray-700/20 background-gray-700/20">
         <div className="  w-full flex justify-around items-center h-12 text-white ">
-          <div className="text-3xl font-bold">MM.</div>
+          <div className="text-3xl font-bold hover:text-teal-500">MM.</div>
 
           <ul className="flex space-x-4 hidden md:flex ">
-            <li>Skills</li>
-            <li>Projects</li>
-            <li>About</li>
-            <li>Contact</li>
+            <li className="hover:text-teal-500">
+              <a href="#skills">Skills</a>
+            </li>
+            <li className="hover:text-teal-500">
+              <a href="#projects">Projects</a>
+            </li>
+            <li className="hover:text-teal-500">
+              <a href="#about">About</a>
+            </li>
+            <li className="hover:text-teal-500">
+              <a href="#contact">Contact</a>
+            </li>
           </ul>
 
-          <button className="bg-teal-500 p-2 rounded-lg hidden md:flex ">
+          <button className="bg-teal-500 p-2 rounded-lg hidden cursor-pointer hover:bg-black hover:text-teal-500 hover:border hover:border-teal-500 md:flex ">
             Resume
           </button>
 
@@ -30,7 +38,6 @@ const Navbar = () => {
             <FontAwesomeIcon
               icon={isOpen ? faXmark : faBars}
               className="fa-fw "
-              
             />
           </button>
 

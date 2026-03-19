@@ -19,7 +19,7 @@ import mercatoApp from "../assets/images/mercato-store-screenshot.png";
 import techtalentApp from "../assets/images/tech-talent-explorer-screenshot.png";
 import wavestatApp from "../assets/images/wave-stats-app-screenshot.png";
 import profile from "../assets/images/melissa_profile.jpg";
-import { Link } from "react-router-dom";
+import fitnessApp from "../assets/images/fitness-booking-spp-screenshot.png";
 
 const LandingPage = () => {
   return (
@@ -285,12 +285,13 @@ const LandingPage = () => {
             </div>
             <div className="space-y-2">
               <div className="flex flex-col justify-center items-start space-y-2">
-                <img src="" alt="" />
-                <h2 className=" font-semibold">Analytics Dashboard</h2>
+                <img src={fitnessApp} alt="Fitness booking app screenshot" />
+                <h2 className=" font-semibold">Fitness Booking App</h2>
                 <p className="text-gray-500 mt-2">
-                  A real time analysics platform built with React and
-                  TypeScript, featuring interactive charts, live date streaming,
-                  and a responsive dark UI
+                  Fitness platform with a landing page, user authentication, and
+                  a personal dashboard for booking and managing training
+                  sessions. Includes an admin portal with a full overview of all
+                  bookings.
                 </p>
                 <div className="technologies flex flex-row space-x-4 ">
                   <div className="bg-grey-500 border border-gray-700/10  text-gray-200 text-sm p-1 rounded-lg">
@@ -303,19 +304,19 @@ const LandingPage = () => {
                     Tailwind CSS
                   </div>
                   <div className="bg-grey-500 border border-gray-700/10  text-gray-200 text-sm p-1 rounded-lg">
-                    Recharts
+                    SupaBase
                   </div>
                 </div>
                 <div className="other space-x-4">
-                  <Link to="/">
+                  <a href="/" target="_blank" rel="noreferrer">
                     {" "}
                     <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                     Live Demo
-                  </Link>
-                  <Link to="/">
+                  </a>
+                  <a href="/" target="_blank" rel="noreferrer">
                     <FontAwesomeIcon icon={faGithub} size="lg" />
                     Source
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
