@@ -308,12 +308,20 @@ const LandingPage = () => {
                   </div>
                 </div>
                 <div className="other space-x-4">
-                  <a href="/" target="_blank" rel="noreferrer">
+                  <a
+                    href="https://fitnessbookingapp.netlify.app/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     {" "}
                     <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                     Live Demo
                   </a>
-                  <a href="/" target="_blank" rel="noreferrer">
+                  <a
+                    href="https://github.com/Melmoyo/Fitness-Booking-App"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <FontAwesomeIcon icon={faGithub} size="lg" />
                     Source
                   </a>
