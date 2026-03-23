@@ -26,10 +26,11 @@ const Navbar = () => {
               <a href="#contact">Contact</a>
             </li>
           </ul>
-
-          <button className="bg-teal-500 p-2 rounded-lg hidden cursor-pointer hover:bg-black hover:text-teal-500 hover:border hover:border-teal-500 md:flex ">
-            Resume
-          </button>
+          <a href="/Melissa Msayinwa CV.pdf" download="Melissa Msayinwa.pdf">
+            <button className="bg-teal-500 p-2 rounded-lg hidden cursor-pointer hover:bg-black hover:text-teal-500 hover:border hover:border-teal-500 md:flex ">
+              Resume
+            </button>
+          </a>
 
           <button
             onClick={handleClick}

@@ -20,8 +20,53 @@ import techtalentApp from "../assets/images/tech-talent-explorer-screenshot.png"
 import wavestatApp from "../assets/images/wave-stats-app-screenshot.png";
 import profile from "../assets/images/melissa_profile.jpg";
 import fitnessApp from "../assets/images/fitness-booking-app-screenshot.png";
+import emailjs from "emailjs-com";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
+const schema = z.object({
+  name: z
+    .string()
+    .nonempty("Name is required")
+    .min(3, "First name should be more than 3 characters")
+    .refine((val) => /^[A-Za-z]+$/.test(val), {
+      message: "Only letters allowed",
+    }),
+  email: z.string().nonempty("Email is required").email("Invalid email"),
+  message: z.string().min(10, "Message too short"),
+});
+type FormData = z.infer<typeof schema>;
 const LandingPage = () => {
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = form;
+  const onSubmit = async (data: FormData) => {
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          name: data.name,
+          email: data.email,
+          message: data.message,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      );
+      alert("Message sent!");
+      reset();
+    } catch (error) {
+      alert("Something went wrong, please try again." + error);
+    }
+    console.log(data);
+    reset();
+  };
   return (
     <>
       <section className=" text-white hero">
@@ -386,7 +431,7 @@ const LandingPage = () => {
           </div>
 
           <div className="mx-10 border border-gray-700/20 p-8 rounded-lg bg-gray-700/10 lg:max-w-2xl mx-auto">
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               {/* Row 1: Name + Email */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div>
@@ -394,22 +439,31 @@ const LandingPage = () => {
                     Name
                   </label>
                   <input
-                    className="w-full border border-gray-700/10 rounded-lg text-gray-400 p-2"
+                    {...register("name")}
+                    className={`w-full border border-gray-700/10 rounded-lg text-gray-400 p-2 ${
+                      errors.name ? "border-red-500" : "border-gray-300"
+                    }`}
                     type="text"
-                    id="name"
                     placeholder="Your name"
                   />
+                  {errors.name && (
+                    <p className="text-red-400">{errors.name.message}</p>
+                  )}
                 </div>
+
                 <div>
                   <label className="text-white font-medium" htmlFor="email">
                     Email
                   </label>
                   <input
+                    {...register("email")}
                     className="w-full border border-gray-700/10 rounded-lg text-gray-400 p-2"
                     type="email"
-                    id="email"
                     placeholder="Your email"
                   />
+                  {errors.email && (
+                    <p className="text-red-400">{errors.email.message}</p>
+                  )}
                 </div>
               </div>
 
@@ -421,9 +475,12 @@ const LandingPage = () => {
                 <textarea
                   rows={5}
                   className="w-full border border-gray-600/10 rounded-lg text-gray-400 p-2"
-                  id="message"
+                  {...register("message")}
                   placeholder="Tell me about your project..."
                 ></textarea>
+                {errors.message && (
+                  <p className="text-red-400">{errors.message.message}</p>
+                )}
               </div>
 
               {/* Row 3: Button */}
