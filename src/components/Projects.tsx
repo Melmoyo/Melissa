@@ -32,12 +32,12 @@ console.log(ProjectsData)
       }`}
     >
       Frontend Projects
-      <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full ${
+       <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full m-2  ${
         activeTab === 'email'
           ? 'bg-teal-700 text-white'
           : 'bg-gray-700 text-gray-400'
       }`}>
-        {ProjectsData.filter((project)=>project.type==="frontend").length}
+         {ProjectsData.filter((project)=>project.type==="frontend").length}
       </span>
     </button>
     <button

@@ -52,7 +52,7 @@ type:"frontend"
 title: "Vaultly Password Reset Email ",
 description:"Minimal transactional security email for a SaaS password manager. Single focus layout with info cards, warning box, fallback URL and security notice.",
 techStack:["HTML","CSS","MJML "],
-liveDemo:"",
+liveDemo:"https://emaildeveloper.netlify.app/vaultly/password-reset-email",
 sourceCode:"https://github.com/Melmoyo/Email-Templates/tree/main/email-templates/vaultly",
 type:"email" 
 },{
@@ -60,7 +60,7 @@ type:"email"
 title: "FixIt Welcome Email",
 description:"Onboarding email for a local services directory.Built with MJML featuring a dark navy hero, multi-column category grid, how-it-works steps and testimonial section.",
 techStack:["HTML","CSS","MJML "],
-liveDemo:"",
+liveDemo:"https://emaildeveloper.netlify.app/fixit/welcome-email",
 sourceCode:"https://github.com/Melmoyo/Email-Templates/tree/main/email-templates/fixit",
 type:"email" 
 },{
@@ -68,7 +68,7 @@ type:"email"
 title: "DevPulse Newsletter Email",
 description:"Editorial weekly newsletter for a developer digest brand. Includes a hero story, numbered story list, tip of the week box, tools section and community poll.",
 techStack:["HTML","CSS","MJML "],
-liveDemo:"",
+liveDemo:"https://emaildeveloper.netlify.app/devpulse/newsletter-email",
 sourceCode:"https://github.com/Melmoyo/Email-Templates/tree/main/email-templates/devpulse",
 type:"email" 
 },{
@@ -76,7 +76,7 @@ type:"email"
 title: "Mercato Confirmation Email",
 description:"Transactional order confirmation email for an e-commerce brand. Includes product line items, order summary table, delivery banner, upsell section and dark themed footer.",
 techStack:["HTML","CSS","MJML "],
-liveDemo:"",
+liveDemo:"https://emaildeveloper.netlify.app/mercato/confirmation-email",
 sourceCode:"https://github.com/Melmoyo/Email-Templates/tree/main/email-templates/mercato",
 type:"email" 
 },{
@@ -84,7 +84,7 @@ type:"email"
 title: "Stackd Black Friday Promo Email",
 description:"High-energy promotional email for a tech accessories store. Features a bold countdown timer, 2x2 product deal grid, featured deal spotlight and urgency strip.",
 techStack:["HTML","CSS","MJML "],
-liveDemo:"",
+liveDemo:"https://emaildeveloper.netlify.app/stackd/black-friday-email",
 sourceCode:"https://github.com/Melmoyo/Email-Templates/tree/main/email-templates/stackd",
 type:"email" 
 }]
