@@ -3,9 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPaperPlane,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 const schema = z.object({
   name: z
@@ -20,9 +18,8 @@ const schema = z.object({
 });
 type FormData = z.infer<typeof schema>;
 
-
-const Contact=()=>{
-    const form = useForm<FormData>({
+const Contact = () => {
+  const form = useForm<FormData>({
     resolver: zodResolver(schema),
   });
   const {
@@ -48,11 +45,12 @@ const Contact=()=>{
     } catch (error) {
       alert("Something went wrong, please try again." + error);
     }
-    console.log(data);
+
     reset();
   };
-    return(<>
-    <section className="scroll-mt-24 mb-24" id="contact">
+  return (
+    <>
+      <section className="scroll-mt-24 mb-24" id="contact">
         <div>
           <div className="flex flex-col items-center text-center mb-8">
             <h2 className="text-teal-400 uppercase">Get in Touch</h2>
@@ -132,6 +130,7 @@ const Contact=()=>{
           </div>
         </div>
       </section>
-    </>)
-}
+    </>
+  );
+};
 export default Contact;
