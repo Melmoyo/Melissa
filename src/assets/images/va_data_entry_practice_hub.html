@@ -1,0 +1,475 @@
+
+<h2 class="sr-only">VA and Data Entry Practice Hub - Interactive training tasks for virtual assistant and data entry work</h2>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .hub { padding: 1rem 0; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .tab { padding: 8px 16px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); font-size: 14px; cursor: pointer; background: var(--color-background-primary); color: var(--color-text-secondary); transition: all 0.15s; }
+  .tab.active { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
+  .tab:hover:not(.active) { background: var(--color-background-secondary); }
+  .section { display: none; }
+  .section.active { display: block; }
+  .task-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .task-label { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 6px; }
+  .task-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
+  .task-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 14px; }
+  .task-area { width: 100%; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 13px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); resize: vertical; min-height: 80px; line-height: 1.6; }
+  .task-input { width: 100%; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 12px; font-size: 13px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .field-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .check-btn { padding: 8px 18px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); font-size: 13px; cursor: pointer; color: var(--color-text-primary); }
+  .check-btn:hover { background: var(--color-background-secondary); }
+  .feedback { margin-top: 10px; font-size: 13px; padding: 10px 14px; border-radius: var(--border-radius-md); display: none; line-height: 1.6; }
+  .feedback.ok { background: var(--color-background-success); color: var(--color-text-success); display: block; }
+  .feedback.err { background: var(--color-background-danger); color: var(--color-text-danger); display: block; }
+  .feedback.tip { background: var(--color-background-info); color: var(--color-text-info); display: block; }
+  .raw-data { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px; font-size: 12px; font-family: var(--font-mono); color: var(--color-text-secondary); line-height: 1.8; margin-bottom: 14px; white-space: pre-wrap; }
+  .badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 99px; margin-bottom: 10px; }
+  .badge-de { background: #E6F1FB; color: #0C447C; }
+  .badge-va { background: #E1F5EE; color: #085041; }
+  .badge-hard { background: #FAEEDA; color: #633806; }
+  .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
+  .progress-bar-wrap { flex: 1; height: 6px; background: var(--color-background-secondary); border-radius: 99px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: #1D9E75; border-radius: 99px; transition: width 0.3s; }
+  .progress-text { font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap; }
+  .tip-box { background: var(--color-background-secondary); border-left: 2px solid #1D9E75; border-radius: 0; padding: 10px 14px; font-size: 13px; color: var(--color-text-secondary); margin-bottom: 14px; line-height: 1.6; }
+  select.task-input { appearance: auto; }
+  table.de-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px; }
+  table.de-table th { background: var(--color-background-secondary); color: var(--color-text-secondary); font-weight: 500; padding: 7px 10px; border: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+  table.de-table td { padding: 7px 10px; border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); }
+  table.de-table input { width: 100%; border: none; background: transparent; font-size: 13px; color: var(--color-text-primary); font-family: var(--font-sans); outline: none; }
+  table.de-table tr.highlight-err td { background: #FCEBEB; }
+  table.de-table tr.highlight-ok td { background: #EAF3DE; }
+</style>
+
+<div class="hub">
+  <div class="progress-row">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
+    <span class="progress-text" id="prog-text">0 of 10 tasks done</span>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('de1')">Data entry 1</div>
+    <div class="tab" onclick="switchTab('de2')">Data entry 2</div>
+    <div class="tab" onclick="switchTab('de3')">Data entry 3</div>
+    <div class="tab" onclick="switchTab('va1')">VA task 1</div>
+    <div class="tab" onclick="switchTab('va2')">VA task 2</div>
+    <div class="tab" onclick="switchTab('va3')">VA task 3</div>
+    <div class="tab" onclick="switchTab('va4')">VA task 4</div>
+    <div class="tab" onclick="switchTab('adv1')">Advanced 1</div>
+    <div class="tab" onclick="switchTab('adv2')">Advanced 2</div>
+    <div class="tab" onclick="switchTab('adv3')">Advanced 3</div>
+  </div>
+
+  <!-- DATA ENTRY 1 -->
+  <div class="section active" id="s-de1">
+    <div class="task-card">
+      <span class="badge badge-de">Data entry — beginner</span>
+      <div class="task-title">Transfer contact details from a messy note</div>
+      <div class="task-desc">A client sent you a raw note with someone's details. Your job is to clean and enter each field correctly — fix spelling, capitalise names properly, and format the phone number.</div>
+      <div class="raw-data">name: john-paul van der berg
+email: JOHNPAUL@gmial.com
+phone: 0832541100
+company: acme solutions pty ltd
+city: johannesburg</div>
+      <div class="tip-box">Pro tip: Always correct obvious typos (like "gmial" → "gmail"), standardise phone format, and use title case for names and companies.</div>
+      <div class="row">
+        <div><div class="field-label">Full name</div><input class="task-input" id="de1-name" placeholder="e.g. John-Paul van der Berg"></div>
+        <div><div class="field-label">Email</div><input class="task-input" id="de1-email" placeholder="corrected email"></div>
+      </div>
+      <div class="row">
+        <div><div class="field-label">Phone (format: 083 254 1100)</div><input class="task-input" id="de1-phone" placeholder="083 254 1100"></div>
+        <div><div class="field-label">Company</div><input class="task-input" id="de1-company" placeholder="Company name"></div>
+      </div>
+      <div><div class="field-label">City</div><input class="task-input" id="de1-city" placeholder="City" style="max-width:200px"></div>
+      <br>
+      <button class="check-btn" onclick="checkDE1()">Check my answers ↗</button>
+      <div class="feedback" id="fb-de1"></div>
+    </div>
+  </div>
+
+  <!-- DATA ENTRY 2 -->
+  <div class="section" id="s-de2">
+    <div class="task-card">
+      <span class="badge badge-de">Data entry — accuracy</span>
+      <div class="task-title">Spot and fix errors in a spreadsheet row</div>
+      <div class="task-desc">Below is a product inventory table with errors in it. Find the mistakes and correct them in the editable column. Real data entry work always involves verifying data, not just copying it.</div>
+      <div class="tip-box">Pro tip: Watch for price formatting, SKU consistency, and impossible values (like negative stock).</div>
+      <table class="de-table">
+        <tr><th>Product</th><th>SKU</th><th>Price (ZAR)</th><th>Stock</th><th>Status</th></tr>
+        <tr><td>Wireless Mouse</td><td>WM-0041</td><td>R 349.00</td><td>82</td><td>Active</td></tr>
+        <tr><td>USB-C Hub</td><td>UC-0089</td><td>R 89900</td><td>14</td><td>Active</td></tr>
+        <tr><td>Laptop Stand</td><td>ls-0012</td><td>R 550.00</td><td>-3</td><td>Active</td></tr>
+        <tr><td>Webcam HD</td><td>WC-0033</td><td>R 1,200.00</td><td>0</td><td>Active</td></tr>
+      </table>
+      <div class="task-desc">List all errors you found and what the corrected values should be:</div>
+      <textarea class="task-area" id="de2-ans" placeholder="e.g. Row 2 (USB-C Hub): Price should be R 899.00 not R 89900&#10;Row 3 (Laptop Stand): ..."></textarea>
+      <br><br>
+      <button class="check-btn" onclick="checkDE2()">Check my answers ↗</button>
+      <div class="feedback" id="fb-de2"></div>
+    </div>
+  </div>
+
+  <!-- DATA ENTRY 3 -->
+  <div class="section" id="s-de3">
+    <div class="task-card">
+      <span class="badge badge-de">Data entry — categorisation</span>
+      <div class="task-title">Categorise and tag a list of expenses</div>
+      <div class="task-desc">A client has raw expense transactions and needs them sorted into categories. Assign each expense a category from the dropdown. This is a very common real data entry task.</div>
+      <div class="tip-box">Categories: Office supplies · Software/subscriptions · Travel · Marketing · Utilities · Meals/entertainment</div>
+      <div style="margin-bottom:14px;">
+        <div class="row3" style="margin-bottom:6px;">
+          <div><div class="field-label">Expense</div></div>
+          <div><div class="field-label">Amount</div></div>
+          <div><div class="field-label">Your category</div></div>
+        </div>
+        <div class="row3" id="exp-rows"></div>
+      </div>
+      <button class="check-btn" onclick="checkDE3()">Check my answers ↗</button>
+      <div class="feedback" id="fb-de3"></div>
+    </div>
+  </div>
+
+  <!-- VA TASK 1 -->
+  <div class="section" id="s-va1">
+    <div class="task-card">
+      <span class="badge badge-va">VA task — email drafting</span>
+      <div class="task-title">Draft a professional follow-up email</div>
+      <div class="task-desc">Your client (Thabo, a freelance consultant) met with a potential client called Ms. Nkosi on Monday. She asked for a proposal. It's now Wednesday and she hasn't responded to the previous email. Draft a polite, professional follow-up email from Thabo.</div>
+      <div class="tip-box">Pro tip: A good follow-up is short, friendly, adds a small value reminder, and has a clear call to action. Do not sound desperate.</div>
+      <div class="field-label" style="margin-bottom:4px;">Subject line</div>
+      <input class="task-input" id="va1-subj" placeholder="Write subject line here" style="margin-bottom:12px;">
+      <div class="field-label" style="margin-bottom:4px;">Email body</div>
+      <textarea class="task-area" id="va1-body" style="min-height:160px;" placeholder="Write the email body here..."></textarea>
+      <br><br>
+      <button class="check-btn" onclick="checkVA1()">Get feedback ↗</button>
+      <div class="feedback" id="fb-va1"></div>
+    </div>
+  </div>
+
+  <!-- VA TASK 2 -->
+  <div class="section" id="s-va2">
+    <div class="task-card">
+      <span class="badge badge-va">VA task — scheduling</span>
+      <div class="task-title">Schedule and confirm a meeting</div>
+      <div class="task-desc">Your client has asked you to set up a 30-minute call with a supplier called Ravi. Ravi is available: Tuesday 10am–12pm or Thursday 2pm–4pm. Your client is free: Monday all day, Tuesday from 11am, Thursday from 3pm. Find the best slot and draft a confirmation message to Ravi.</div>
+      <div class="tip-box">Pro tip: Always confirm timezone, date (not just "Tuesday"), duration, and a meeting link or dial-in detail if applicable.</div>
+      <div class="field-label" style="margin-bottom:4px;">Best meeting slot (explain your reasoning)</div>
+      <input class="task-input" id="va2-slot" placeholder="e.g. Thursday 3pm–3:30pm — why?" style="margin-bottom:12px;">
+      <div class="field-label" style="margin-bottom:4px;">Confirmation message to Ravi</div>
+      <textarea class="task-area" id="va2-msg" style="min-height:140px;" placeholder="Write your message to Ravi..."></textarea>
+      <br><br>
+      <button class="check-btn" onclick="checkVA2()">Get feedback ↗</button>
+      <div class="feedback" id="fb-va2"></div>
+    </div>
+  </div>
+
+  <!-- VA TASK 3 -->
+  <div class="section" id="s-va3">
+    <div class="task-card">
+      <span class="badge badge-va">VA task — inbox management</span>
+      <div class="task-title">Triage and prioritise an inbox</div>
+      <div class="task-desc">Your client just came back from 3 days away and has 8 unread emails. Read each summary below and assign it a priority label and a recommended action.</div>
+      <div class="tip-box">Priority levels: 🔴 Urgent (same day) · 🟡 Important (this week) · 🟢 Low (can wait or delete)</div>
+      <div id="inbox-rows"></div>
+      <button class="check-btn" onclick="checkVA3()">Get feedback ↗</button>
+      <div class="feedback" id="fb-va3"></div>
+    </div>
+  </div>
+
+  <!-- VA TASK 4 -->
+  <div class="section" id="s-va4">
+    <div class="task-card">
+      <span class="badge badge-va">VA task — research</span>
+      <div class="task-title">Research and summarise information</div>
+      <div class="task-desc">Your client wants to know about 3 project management tools to potentially use for their team of 5. Without looking anything up (use what you know), summarise Trello, Asana, and Notion as if you were a VA presenting options to your client. Keep it brief and professional.</div>
+      <div class="tip-box">Pro tip: A VA research summary has: tool name, what it does in one sentence, best for (team size/use case), pricing tier, and a recommendation. Never copy-paste — always rewrite in your own words.</div>
+      <textarea class="task-area" id="va4-ans" style="min-height:200px;" placeholder="Write your research summary here...&#10;&#10;Tool 1: Trello&#10;Tool 2: Asana&#10;Tool 3: Notion"></textarea>
+      <br><br>
+      <button class="check-btn" onclick="checkVA4()">Get feedback ↗</button>
+      <div class="feedback" id="fb-va4"></div>
+    </div>
+  </div>
+
+  <!-- ADVANCED 1 -->
+  <div class="section" id="s-adv1">
+    <div class="task-card">
+      <span class="badge badge-hard">Advanced — data cleaning</span>
+      <div class="task-title">Clean a messy bulk contact list</div>
+      <div class="task-desc">You've been given a raw exported contact list. Rewrite each entry in the correct standardised format below. This is the kind of task you'd do before importing data into a CRM like HubSpot or Salesforce.</div>
+      <div class="raw-data">1. MR SIPHO DLAMINI | sipho@gmail | 0711234567 | SALES MGR | ABC trading
+2. lerato.mokoena@outlook.com, ms lerato mokoena, 082 987 6543 , HR , XYZ Corp
+3. FATIMA OMAR · fatima.omar@work.co.za · +27 84 111 2233 · ceo · omar enterprises</div>
+      <div class="tip-box">Standard format: Full Name | Email | Phone (+27 format) | Job Title (title case) | Company</div>
+      <textarea class="task-area" id="adv1-ans" style="min-height:120px;" placeholder="Entry 1: &#10;Entry 2: &#10;Entry 3: "></textarea>
+      <br><br>
+      <button class="check-btn" onclick="checkAdv1()">Check my answers ↗</button>
+      <div class="feedback" id="fb-adv1"></div>
+    </div>
+  </div>
+
+  <!-- ADVANCED 2 -->
+  <div class="section" id="s-adv2">
+    <div class="task-card">
+      <span class="badge badge-hard">Advanced — VA client brief</span>
+      <div class="task-title">Respond to a real client brief</div>
+      <div class="task-desc">A new client sent you this message. Respond professionally as their VA — acknowledge the tasks, ask any clarifying questions you need, and confirm your understanding of what you'll deliver.</div>
+      <div class="raw-data">Hi! So happy to have you on board. Quick rundown of what I need this week: 
+- Sort out my emails (there's like 200+)
+- Book flights to Cape Town for me and my colleague for next Thursday  
+- Find a good accountant in JHB
+- Put together a weekly report template I can use going forward
+- Also can u chase the guys at BrandCo they haven't responded to our quote
+
+Let me know what you need from me. Thanks!</div>
+      <div class="tip-box">Pro tip: A great VA response organises tasks by priority, flags what info is missing, confirms deadlines, and sounds confident — not overwhelmed.</div>
+      <textarea class="task-area" id="adv2-ans" style="min-height:220px;" placeholder="Write your professional response here..."></textarea>
+      <br><br>
+      <button class="check-btn" onclick="checkAdv2()">Get feedback ↗</button>
+      <div class="feedback" id="fb-adv2"></div>
+    </div>
+  </div>
+
+  <!-- ADVANCED 3 -->
+  <div class="section" id="s-adv3">
+    <div class="task-card">
+      <span class="badge badge-hard">Advanced — combined task</span>
+      <div class="task-title">Build a simple client tracker from raw info</div>
+      <div class="task-desc">Your client gave you this unstructured info about their 4 active clients. Organise it into a clean, structured tracker with the columns: Client Name | Contact Person | Email | Status | Next Action | Due Date.</div>
+      <div class="raw-data">- Zenith Media: speak to James (james@zenith.co.za). Still waiting on their signed contract. Follow up by end of this week.
+- Bright Ideas Agency: contact is Sarah Paulsen, sarah.p@brightideas.com. They paid deposit, now waiting on brief. Due Monday.
+- CoreTech: no contact yet, just a company name from a referral. Need to find their details and reach out asap.
+- Nova Brands: Lindi Dube is the contact, lindi@novabrands.co.za. Project is active and on track. Monthly check-in due in 2 weeks.</div>
+      <div class="tip-box">Pro tip: Where info is missing, write "TBC" or "To confirm". Keep all status labels consistent (e.g. Pending / Active / Awaiting info).</div>
+      <textarea class="task-area" id="adv3-ans" style="min-height:180px;" placeholder="Client Name | Contact Person | Email | Status | Next Action | Due Date&#10;1. &#10;2. &#10;3. &#10;4. "></textarea>
+      <br><br>
+      <button class="check-btn" onclick="checkAdv3()">Get feedback ↗</button>
+      <div class="feedback" id="fb-adv3"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const completed = new Set();
+function markDone(id) {
+  completed.add(id);
+  const fill = document.getElementById('prog-fill');
+  const txt = document.getElementById('prog-text');
+  const pct = Math.round((completed.size / 10) * 100);
+  fill.style.width = pct + '%';
+  txt.textContent = completed.size + ' of 10 tasks done';
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const ids = ['de1','de2','de3','va1','va2','va3','va4','adv1','adv2','adv3'];
+    t.classList.toggle('active', ids[i] === id);
+  });
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('s-' + id).classList.add('active');
+}
+
+function show(id, cls, msg) {
+  const el = document.getElementById(id);
+  el.className = 'feedback ' + cls;
+  el.innerHTML = msg;
+}
+
+function checkDE1() {
+  const name = document.getElementById('de1-name').value.trim();
+  const email = document.getElementById('de1-email').value.trim().toLowerCase();
+  const phone = document.getElementById('de1-phone').value.trim();
+  const company = document.getElementById('de1-company').value.trim();
+  const city = document.getElementById('de1-city').value.trim();
+  let issues = [];
+  if (!name.includes('van der Berg') && !name.includes('Van Der Berg')) issues.push('Name: should be "John-Paul van der Berg" — check capitalisation of "van der"');
+  if (!email.includes('gmail.com')) issues.push('Email: "gmial" was a typo — should be "johnpaul@gmail.com"');
+  if (!phone.includes('083') || phone.replace(/\s/g,'').length < 10) issues.push('Phone: format should be "083 254 1100" with spaces');
+  if (company.toLowerCase().includes('acme') && !company.includes('(Pty)') && !company.toLowerCase().includes('pty')) issues.push('Company: include the full "Acme Solutions (Pty) Ltd"');
+  if (!city.toLowerCase().includes('johannesburg') && !city.toLowerCase().includes('jhb')) issues.push('City: should be "Johannesburg"');
+  if (issues.length === 0) { show('fb-de1', 'ok', '✓ All fields correctly entered. Great work — this is exactly the standard a real client expects.'); markDone('de1'); }
+  else show('fb-de1', 'err', 'Fix these: <br>• ' + issues.join('<br>• '));
+}
+
+function checkDE2() {
+  const ans = document.getElementById('de2-ans').value.toLowerCase();
+  let found = 0, tips = [];
+  if (ans.includes('899') || ans.includes('r 899')) { found++; } else tips.push('USB-C Hub price: R 89900 should be R 899.00 (missing decimal point)');
+  if (ans.includes('ls-') && (ans.includes('LS-') || ans.includes('uppercase') || ans.includes('caps'))) { found++; } else if (ans.includes('ls-0012') || ans.includes('case') || ans.includes('sku')) { found++; } else tips.push('Laptop Stand SKU: "ls-0012" should be "LS-0012" (must be uppercase to match format)');
+  if (ans.includes('-3') || ans.includes('negative') || ans.includes('zero') || ans.includes('0')) { found++; } else tips.push('Laptop Stand stock: -3 is impossible. Should be 0 or flagged for review');
+  if (ans.includes('webcam') && (ans.includes('out of stock') || ans.includes('discontinued') || ans.includes('inactive') || ans.includes('status'))) { found++; } else tips.push('Webcam HD: stock is 0 — status should likely be "Out of stock" not "Active"');
+  if (tips.length === 0) show('fb-de2', 'ok', '✓ Excellent! You caught all the errors. In real work, this kind of attention to detail is what gets you rehired.'); markDone('de2');
+  else show('fb-de2', 'err', 'You missed some errors:<br>• ' + tips.join('<br>• '));
+}
+
+const expenses = [
+  { name: 'Adobe Creative Cloud subscription', amt: 'R 359/mo', correct: 'software' },
+  { name: 'Uber to client meeting', amt: 'R 85', correct: 'travel' },
+  { name: 'Team lunch at Nando\'s', amt: 'R 620', correct: 'meals' },
+  { name: 'A4 paper and pens (box)', amt: 'R 210', correct: 'office' },
+  { name: 'Facebook Ads campaign', amt: 'R 1,500', correct: 'marketing' },
+  { name: 'Eskom electricity bill', amt: 'R 2,100', correct: 'utilities' },
+];
+function buildExpenses() {
+  const container = document.getElementById('exp-rows');
+  if (!container || container.children.length > 0) return;
+  expenses.forEach((e, i) => {
+    const nameDiv = document.createElement('div');
+    nameDiv.style.cssText = 'font-size:13px;color:var(--color-text-primary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);';
+    nameDiv.textContent = e.name;
+    const amtDiv = document.createElement('div');
+    amtDiv.style.cssText = 'font-size:13px;color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);';
+    amtDiv.textContent = e.amt;
+    const selDiv = document.createElement('div');
+    selDiv.style.cssText = 'padding:3px 0;border-bottom:0.5px solid var(--color-border-tertiary);';
+    const sel = document.createElement('select');
+    sel.className = 'task-input';
+    sel.id = 'exp-' + i;
+    sel.style.cssText = 'font-size:12px;padding:5px 8px;';
+    ['-- select --','office','software','travel','marketing','utilities','meals'].forEach(o => {
+      const opt = document.createElement('option'); opt.value = o; opt.textContent = o; sel.appendChild(opt);
+    });
+    selDiv.appendChild(sel);
+    container.appendChild(nameDiv); container.appendChild(amtDiv); container.appendChild(selDiv);
+  });
+}
+setTimeout(buildExpenses, 100);
+
+function checkDE3() {
+  let wrong = [];
+  const map = { 0:'software', 1:'travel', 2:'meals', 3:'office', 4:'marketing', 5:'utilities' };
+  expenses.forEach((e, i) => {
+    const sel = document.getElementById('exp-' + i);
+    if (!sel) return;
+    const v = sel.value.toLowerCase();
+    const ok = map[i];
+    if (!v.includes(ok.substring(0,4))) wrong.push('"' + e.name + '" → should be ' + ok);
+  });
+  if (wrong.length === 0) { show('fb-de3', 'ok', '✓ Perfect categorisation! Clients rely on accurate categories for their bookkeeping — you nailed it.'); markDone('de3'); }
+  else show('fb-de3', 'err', 'These need fixing:<br>• ' + wrong.join('<br>• '));
+}
+
+function checkVA1() {
+  const subj = document.getElementById('va1-subj').value.trim();
+  const body = document.getElementById('va1-body').value.trim();
+  let tips = [];
+  if (subj.length < 5) tips.push('Add a subject line');
+  else if (!subj.toLowerCase().includes('follow') && !subj.toLowerCase().includes('proposal') && !subj.toLowerCase().includes('nkosi')) tips.push('Subject line should reference the proposal or Ms Nkosi (e.g. "Following up on our proposal")');
+  if (body.length < 80) tips.push('Email body is too short — a professional follow-up needs context and a call to action');
+  if (!body.toLowerCase().includes('nkosi') && !body.toLowerCase().includes('ms')) tips.push('Address Ms Nkosi by name — never write a blank "Hi" in a professional email');
+  if (!body.toLowerCase().includes('proposal') && !body.toLowerCase().includes('discuss')) tips.push('Reference the proposal or next step clearly');
+  if (body.toLowerCase().includes('just following up') || body.toLowerCase().includes('just wanted')) tips.push('Avoid "just following up" or "just wanted to" — these sound weak. Be confident: "I wanted to check in on..."');
+  if (tips.length === 0) { show('fb-va1', 'ok', '✓ Strong email! Professional tone, addressed correctly, clear purpose. This is VA-level work.'); markDone('va1'); }
+  else show('fb-va1', 'tip', 'Good start — improve these:<br>• ' + tips.join('<br>• '));
+}
+
+function checkVA2() {
+  const slot = document.getElementById('va2-slot').value.trim().toLowerCase();
+  const msg = document.getElementById('va2-msg').value.trim();
+  let tips = [];
+  if (!slot.includes('thursday') && !slot.includes('thur')) tips.push('Correct slot is Thursday at 3pm (overlapping availability for both parties)');
+  if (msg.length < 60) tips.push('Confirmation message is too short — include date, time, duration, and any meeting link');
+  if (!msg.toLowerCase().includes('thursday')) tips.push('Specify the day clearly in the message (e.g. "Thursday, [date]") — never just say "Thursday" without the date in formal comms');
+  if (!msg.toLowerCase().includes('30') && !msg.toLowerCase().includes('half')) tips.push('Mention the meeting duration (30 minutes) so Ravi can block his calendar correctly');
+  if (tips.length === 0) { show('fb-va2', 'ok', '✓ Excellent scheduling! You found the correct overlap and confirmed all key details. This prevents costly back-and-forth.'); markDone('va2'); }
+  else show('fb-va2', 'tip', 'Nearly there:<br>• ' + tips.join('<br>• '));
+}
+
+const emails = [
+  { from: 'Client A', subj: 'URGENT: Invoice overdue — service suspended tomorrow', q: 'Priority & action?' },
+  { from: 'Newsletter', subj: 'Your monthly productivity digest is here', q: 'Priority & action?' },
+  { from: 'HR', subj: 'Please complete your tax form by end of week', q: 'Priority & action?' },
+  { from: 'Potential client', subj: 'Enquiry about your consulting rates', q: 'Priority & action?' },
+  { from: 'LinkedIn', subj: '14 people viewed your profile this week', q: 'Priority & action?' },
+  { from: 'Supplier', subj: 'Re: Delivery delay — order #4421', q: 'Priority & action?' },
+  { from: 'Bank', subj: 'Your statement is ready to view', q: 'Priority & action?' },
+  { from: 'Team member', subj: 'Quick question about next week\'s deadline', q: 'Priority & action?' },
+];
+function buildInbox() {
+  const container = document.getElementById('inbox-rows');
+  if (!container || container.children.length > 0) return;
+  emails.forEach((e, i) => {
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;';
+    const info = document.createElement('div');
+    info.innerHTML = '<div style="font-size:12px;color:var(--color-text-tertiary);margin-bottom:2px;">From: ' + e.from + '</div><div style="font-size:13px;color:var(--color-text-primary);">' + e.subj + '</div>';
+    const sel = document.createElement('select');
+    sel.className = 'task-input';
+    sel.id = 'inbox-' + i;
+    sel.style.cssText = 'font-size:12px;padding:5px 8px;width:140px;';
+    ['-- priority --','🔴 Urgent','🟡 Important','🟢 Low / delete'].forEach(o => {
+      const opt = document.createElement('option'); opt.value = o; opt.textContent = o; sel.appendChild(opt);
+    });
+    card.appendChild(info); card.appendChild(sel);
+    container.appendChild(card);
+  });
+}
+setTimeout(buildInbox, 100);
+
+const inboxCorrect = ['urgent','urgent','important','important','low','important','low','important'];
+function checkVA3() {
+  let wrong = 0;
+  emails.forEach((e, i) => {
+    const sel = document.getElementById('inbox-' + i);
+    if (!sel) return;
+    const v = sel.value.toLowerCase();
+    if (!v.includes(inboxCorrect[i].substring(0,4)) && !v.includes('priority')) wrong++;
+  });
+  if (wrong === 0) { show('fb-va3', 'ok', '✓ Perfect inbox triage! You saved your client from missing a payment, a tax deadline, and a potential new client enquiry.'); markDone('va3'); }
+  else show('fb-va3', 'tip', wrong + ' priorities need adjusting. Hint: the overdue invoice, tax form, potential client, and supplier delay are all urgent or important. LinkedIn & bank statement can wait.');
+}
+
+function checkVA4() {
+  const ans = document.getElementById('va4-ans').value.trim();
+  let tips = [];
+  if (ans.length < 150) tips.push('Too brief — each tool needs at least 2–3 sentences');
+  if (!ans.toLowerCase().includes('trello')) tips.push('Trello section is missing or too short');
+  if (!ans.toLowerCase().includes('asana')) tips.push('Asana section is missing or too short');
+  if (!ans.toLowerCase().includes('notion')) tips.push('Notion section is missing or too short');
+  if (!ans.toLowerCase().includes('free') && !ans.toLowerCase().includes('price') && !ans.toLowerCase().includes('plan') && !ans.toLowerCase().includes('cost')) tips.push('Include pricing info — clients always want to know cost');
+  if (!ans.toLowerCase().includes('recommend') && !ans.toLowerCase().includes('suggest') && !ans.toLowerCase().includes('best for')) tips.push('Add a recommendation — a good VA does not just list, they advise');
+  if (tips.length === 0) { show('fb-va4', 'ok', '✓ Great research summary! You covered the tools, costs, and gave a recommendation — exactly what a VA should deliver.'); markDone('va4'); }
+  else show('fb-va4', 'tip', 'Improve these areas:<br>• ' + tips.join('<br>• '));
+}
+
+function checkAdv1() {
+  const ans = document.getElementById('adv1-ans').value;
+  let tips = [];
+  if (!ans.includes('+27') && !ans.toLowerCase().includes('27 71') && !ans.toLowerCase().includes('+2771')) tips.push('Phone numbers should be in +27 format for international standard (e.g. +27 71 123 4567)');
+  if (ans.toLowerCase().includes('sipho dlamini') && !ans.includes('Sales Manager') && !ans.includes('Sales Mgr')) tips.push('Expand abbreviations: "SALES MGR" → "Sales Manager"');
+  if (ans.toLowerCase().includes('mr ') || ans.toLowerCase().includes('ms ')) tips.push('Remove honorifics (Mr/Ms) from the name field — CRMs store first/last name only');
+  if (ans.split('\n').filter(l => l.trim().startsWith('Entry') || l.trim().match(/^\d\./)).length < 3) tips.push('All 3 entries must be reformatted');
+  if (tips.length === 0) { show('fb-adv1', 'ok', '✓ Excellent! Clean, standardised, CRM-ready data. This is exactly the format a client would import into HubSpot or Salesforce.'); markDone('adv1'); }
+  else show('fb-adv1', 'err', 'Fix these:<br>• ' + tips.join('<br>• '));
+}
+
+function checkAdv2() {
+  const ans = document.getElementById('adv2-ans').value.trim();
+  let tips = [];
+  if (ans.length < 200) tips.push('Response is too short for 5 tasks — address each one');
+  if (!ans.toLowerCase().includes('flight') && !ans.toLowerCase().includes('travel')) tips.push('Confirm you\'ll handle the flights — and ask for travel preferences (seat, meal, time)');
+  if (!ans.toLowerCase().includes('accountant') && !ans.toLowerCase().includes('research')) tips.push('Acknowledge the accountant search task');
+  if (!ans.toLowerCase().includes('brandco') && !ans.toLowerCase().includes('brand co') && !ans.toLowerCase().includes('chase')) tips.push('Confirm you\'ll follow up with BrandCo');
+  const hasQuestion = ans.includes('?');
+  if (!hasQuestion) tips.push('Ask at least one clarifying question (e.g. flight budget, return date, email access)');
+  if (!ans.toLowerCase().includes('email') || ans.toLowerCase().indexOf('email') === ans.toLowerCase().lastIndexOf('email')) tips.push('Mention that you need email access or will need her to forward emails for the inbox task');
+  if (tips.length === 0) { show('fb-adv2', 'ok', '✓ Professional and thorough! You addressed all tasks, asked the right questions, and sounded confident. That is what a great VA looks like.'); markDone('adv2'); }
+  else show('fb-adv2', 'tip', 'Good start — add these:<br>• ' + tips.join('<br>• '));
+}
+
+function checkAdv3() {
+  const ans = document.getElementById('adv3-ans').value.trim();
+  let tips = [];
+  if (!ans.toLowerCase().includes('zenith') ) tips.push('Zenith Media entry is missing');
+  if (!ans.toLowerCase().includes('bright')) tips.push('Bright Ideas Agency entry is missing');
+  if (!ans.toLowerCase().includes('coretech') && !ans.toLowerCase().includes('core tech')) tips.push('CoreTech entry is missing');
+  if (!ans.toLowerCase().includes('nova')) tips.push('Nova Brands entry is missing');
+  if (!ans.toLowerCase().includes('tbc') && !ans.toLowerCase().includes('to confirm') && !ans.toLowerCase().includes('unknown')) tips.push('Use "TBC" for missing info (CoreTech has no contact yet)');
+  if (!ans.toLowerCase().includes('pending') && !ans.toLowerCase().includes('active') && !ans.toLowerCase().includes('awaiting')) tips.push('Include a Status column with consistent labels (e.g. Pending / Active / Awaiting info)');
+  if (tips.length === 0) { show('fb-adv3', 'ok', '✓ Tracker complete! Clean, consistent, and a client could immediately use this. This is a core VA skill that gets you long-term contracts.'); markDone('adv3'); }
+  else show('fb-adv3', 'err', 'Fix these:<br>• ' + tips.join('<br>• '));
+}
+</script>

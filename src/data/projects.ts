@@ -9,15 +9,16 @@ import devpulse from "../assets/images/devpulse_newsletter_browser_screenshot.pn
 import vaultly from "../assets/images/vaultly_passwordreset_browser_screenshot.png";
 import stackd from "../assets/images/stackd_promo_browser_screenshot.png";
 import bellabites from "../assets/images/bellabites.png";
+import subtrack from "../assets/images/SubscriptionTracker.png";
 export const ProjectsData: Project[] = [
   {
-    image: mercatoApp,
-    title: "Mercato Store App",
+    image: subtrack,
+    title: "SubTrack ",
     description:
-      "A React-based e-commerce app powered by the Fake Store API.Features include product listing, search functionality, andcategory filtering, built to simulate a real-world shopping experience.",
-    techStack: ["React", "TypeScript", "Tailwind CSS", "FakeStoreApi"],
-    liveDemo: "https://mercatostore.netlify.app/",
-    sourceCode: "https://github.com/Melmoyo/Mercato-Store",
+      "Track subscriptions with multi-currency support ,monitor monthly and annual spend, toggle between currencies, and manage due dates all in one place.",
+    techStack: ["React", "TailwindCSS", "TypeScript"],
+    liveDemo: "https://subsrtrack.netlify.app/",
+    sourceCode: "https://github.com/Melmoyo/Subscription-Tracker",
     type: "frontend",
   },
   {
@@ -30,6 +31,17 @@ export const ProjectsData: Project[] = [
     sourceCode: "https://github.com/Melmoyo/Wave-Stat",
     type: "frontend",
   },
+  {
+    image: mercatoApp,
+    title: "Mercato Store App",
+    description:
+      "A React-based e-commerce app powered by the Fake Store API.Features include product listing, search functionality, andcategory filtering, built to simulate a real-world shopping experience.",
+    techStack: ["React", "TypeScript", "Tailwind CSS", "FakeStoreApi"],
+    liveDemo: "https://mercatostore.netlify.app/",
+    sourceCode: "https://github.com/Melmoyo/Mercato-Store",
+    type: "frontend",
+  },
+
   {
     image: techtalentApp,
     title: "Tech Talent Explorer",
