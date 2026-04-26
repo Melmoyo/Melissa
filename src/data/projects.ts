@@ -9,7 +9,7 @@ import devpulse from "../assets/images/devpulse_newsletter_browser_screenshot.pn
 import vaultly from "../assets/images/vaultly_passwordreset_browser_screenshot.png";
 import stackd from "../assets/images/stackd_promo_browser_screenshot.png";
 import bellabites from "../assets/images/bellabites.png";
-import subtrack from "../assets/images/SubscriptionTracker.png";
+import subtrack from "../assets/images/subscription-tracker.png";
 export const ProjectsData: Project[] = [
   {
     image: subtrack,
