@@ -41,17 +41,6 @@ export const ProjectsData: Project[] = [
     sourceCode: "https://github.com/Melmoyo/Mercato-Store",
     type: "frontend",
   },
-
-  {
-    image: techtalentApp,
-    title: "Tech Talent Explorer",
-    description:
-      "TechTalentExplorer is a React app that leverages the GitHub REST API to search and explore developer profiles. View repositories, follower counts, and contribution activity to discover",
-    techStack: ["React", "TypeScript", "Tailwind CSS", "Github Rest Api"],
-    liveDemo: "https://techtalentexplorer.netlify.app/",
-    sourceCode: "https://github.com/Melmoyo/TechTalentExplorer",
-    type: "frontend",
-  },
   {
     image: fitnessApp,
     title: "Fitness Booking App",
