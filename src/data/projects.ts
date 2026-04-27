@@ -1,6 +1,6 @@
 import type { Project } from "../types/datatypes";
 import mercatoApp from "../assets/images/mercato-store-screenshot.png";
-import techtalentApp from "../assets/images/tech-talent-explorer-screenshot.png";
+
 import fitnessApp from "../assets/images/fitness-booking-app-screenshot.png";
 import wavestatApp from "../assets/images/wave-stats-app-screenshot.png";
 import mercato from "../assets/images/mercato_confirmation_browser_screenshot.png";
